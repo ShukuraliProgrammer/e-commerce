@@ -7,3 +7,5 @@
 // Install requireemenets in requirements/develop.txt
 
 
+# 3- step
+// Configure Database 
