@@ -9,3 +9,6 @@
 
 # 3- step
 // Configure Database 
+
+# 4- step
+// Run the project with comand python3 manage.py runserver
