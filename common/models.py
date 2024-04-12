@@ -9,11 +9,11 @@ class Media(models.Model):
         MUSIC = "music", _("Music")
         VIDEO = "video", _("video")
 
-    file = models.FileField(_("File"), upload_to="files")
+    file = models.FileField(_("File"), upload_to="/files")
     type = models.CharField(_("Type"), max_length=60, choices=MediaType.choices)
 
     def __str__(self):
-        return self.id
+        return str(self.id) + " " + str(self.file.name.split("/")[-1])
 
 
 class Settings(models.Model):

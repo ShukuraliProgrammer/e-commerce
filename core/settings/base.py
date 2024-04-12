@@ -2,7 +2,8 @@ import environ
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, True)
@@ -35,7 +36,10 @@ LOCAL_APPS = [
     'common'
 ]
 
-THIRD_PARTY_APPS = []
+THIRD_PARTY_APPS = [
+    'ckeditor',
+    'mptt',
+]
 
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS
 
@@ -128,3 +132,15 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': 700,
+    },
+}
+MPTT_ADMIN_LEVEL_INDENT = 20
