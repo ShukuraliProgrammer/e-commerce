@@ -78,17 +78,23 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env.str('DB_NAME'),
+#         'USER': env.str('DB_USER'),
+#         'PASSWORD': env.str('DB_PASSWORD'),
+#         'PORT': env.str('DB_PORT'),
+#         'HOST': env.str('DB_HOST'),
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env.str('DB_NAME'),
-        'USER': env.str('DB_USER'),
-        'PASSWORD': env.str('DB_PASSWORD'),
-        'PORT': env.str('DB_PORT'),
-        'HOST': env.str('DB_HOST'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'mydatabase',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -157,3 +163,10 @@ EMAIL_HOST_PASSWORD = 'jfwobzudzawhoedy'
 
 
 OTP_CODE_ACTIVATION_TIME=2  # in minutes
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
