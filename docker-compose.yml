@@ -1,0 +1,43 @@
+version: '3.7'
+
+services:
+  db:
+    container_name: e_commerce_db
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_HOST=${DB_HOST}
+      - POSTGRES_PORT=${DB_PORT}
+    restart: always
+    env_file:
+      - .env
+
+  web:
+    container_name: e_commerce_web
+    depends_on:
+      - db
+    build:
+      context: ./
+      dockerfile: Dockerfile
+
+    volumes:
+      - /home/app/web/static:/static
+      - /home/app/web/media:/media
+      # - ./locale:/home/app/web/locale
+    env_file: .env
+    command: python3 manage.py runserver 0.0.0.0:${PORT}
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+
+
+# gunicorn src.core.wsgi:application --bind 0.0.0.0:${PORT} --timeout 120
+
+
+volumes:
+  postgres_data:
+  static_volume:
