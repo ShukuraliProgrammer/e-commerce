@@ -10,4 +10,6 @@ urlpatterns = [
     path('verify-otp/', VerifyOtpView.as_view(), name='verify-otp'),
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('reset-password/start/', ResetPasswordStartView.as_view(), name='reset_password_start'),
+    path('reset-password/finish/', ResetPasswordFinishView.as_view(), name='reset_password_finish'),
 ]

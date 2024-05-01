@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     'ckeditor',
     'mptt',
     'rest_framework',
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS
@@ -168,5 +169,14 @@ OTP_CODE_ACTIVATION_TIME=2  # in minutes
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'E-commerce Documentation',
+    'DESCRIPTION': 'For learning',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
 }
