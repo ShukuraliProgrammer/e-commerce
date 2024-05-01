@@ -34,6 +34,8 @@ class Product(models.Model):
     in_stock = models.BooleanField(_("in stock"), default=True)
     brand = models.CharField(_("brand"), max_length=255)
     discount = models.IntegerField(_("discount"), help_text=_("in percentage"))
+    thumbnail = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
+
 
     def __str__(self):
         return self.name
