@@ -12,8 +12,9 @@ from accounts.utils import check_otp_code
 
 class User(AbstractUser):
     email = models.EmailField(_("Email"), unique=True)
-    phone_number = models.CharField(_("Phone Number"), max_length=20, validators=[RegexValidator(r'^\+?1?\d{9,13}$')])
-    address = models.TextField(_("Address"))
+    phone_number = models.CharField(_("Phone Number"), max_length=20, validators=[RegexValidator(r'^\+?1?\d{9,13}$')],
+                                    null=True, blank=True)
+    address = models.TextField(_("Address"), null=True, blank=True)
     username = models.CharField(
         _("username"),
         max_length=150,

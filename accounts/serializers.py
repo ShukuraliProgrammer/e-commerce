@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.utils import timezone
 from django.conf import settings
 from accounts.models import User, VerifictionOtp
-from accounts.utils import generate_code, send_email
+from accounts.utils import generate_code
+from accounts.tasks import send_otp_code_to_email
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -19,9 +20,15 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 sms.expires_in = timezone.now() + settings.OTP_CODE_ACTIVATION_TIME
                 code = generate_code()
                 sms.code = code
-                send_email(code=code, email=user.email)
+                send_otp_code_to_email(code=code, email=user.email)
 
-        return self.create(self, validated_data)
+        user = User.objects.create(first_name=validated_data.get("first_name"),
+                                   last_name=validated_data.get("last_name"),
+                                   email=validated_data.get("email"),
+                                   )
+        user.set_password(validated_data.get("password"))
+        user.save()
+        return user
 
 
 class VerifyOtpSerializer(serializers.Serializer):
