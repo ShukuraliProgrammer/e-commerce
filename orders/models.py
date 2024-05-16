@@ -13,6 +13,10 @@ class CartItem(models.Model):
     def __str__(self):
         return f"User Id: {self.user.id}|Product: {self.product.name}"
 
+    def save(self, *args, **kwargs):
+        self.subtotal = self.quantity * self.product.price
+        super().save(*args, **kwargs)
+
 
 class Card(models.Model):
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name="cards")
@@ -89,4 +93,5 @@ class Order(models.Model):
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
     payment_status = models.CharField(_("Payment Status"), max_length=60, choices=PaymentStatus.choices)
     payment_method = models.CharField(_("Payment Method"), max_length=60)
-    delivery_tariff = models.ForeignKey(DeliveryTariff, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
+    delivery_tariff = models.ForeignKey(DeliveryTariff, on_delete=models.SET_NULL, null=True, blank=True,
+                                        related_name="orders")
