@@ -5,13 +5,12 @@ from products.utitls import validate_rating
 from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor.fields import RichTextField
 
-# Create your models here.
 
+# Create your models here.
 class Category(MPTTModel):
     name = models.CharField(_("name"), max_length=255)
     image = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
     parent = TreeForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children')
-
 
     def __str__(self):
         return self.name

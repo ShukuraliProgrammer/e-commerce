@@ -49,11 +49,16 @@ class ProductSizeListView(ListAPIView):
 
 
 class ProductReviewsListView(ListAPIView):
-    # queryset = ProductReview.objects.all()
+    queryset = ProductReview.objects.all()
     serializer_class = ProductReviewListSerializer
 
     def get_queryset(self):
-        product_id = self.request.query_params.get('product__id')
+        product_id = self.request.query_params.get('product_id')
         if product_id is None:
-            return ProductReview.objects.all().filter(product_id=product_id)
-        return Response(data={'status': false, 'messeage': 'No reviews'})
+            return self.queryset.filter(product_id=product_id)
+        return Response(
+            data={
+                'status': false,
+                'messeage': 'No reviews'
+            }
+        )

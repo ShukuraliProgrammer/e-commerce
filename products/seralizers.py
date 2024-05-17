@@ -29,7 +29,8 @@ class ProductSizeListSerializer(serializers.Serializer):
 
 
 class ProductReviewListSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField()
 
     class Meta:
         model = ProductReview
-        fields = ('product', 'user', 'title', 'review', 'rank', 'email', 'created_at')
+        fields = ('product_id', 'product', 'user', 'title', 'review', 'rank', 'email', 'created_at')
