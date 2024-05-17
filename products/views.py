@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView
+from rest_framework.response import Response
 
-from products.models import Category, Product, ProductColour, ProductSize
+from products.models import Category, Product, ProductColour, ProductSize, ProductReview
 from products.seralizers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
-    ProductSizeListSerializer
+    ProductSizeListSerializer, ProductReviewListSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -45,3 +46,14 @@ class ProductColourListView(ListAPIView):
 class ProductSizeListView(ListAPIView):
     queryset = ProductSize.objects.all()
     serializer_class = ProductSizeListSerializer
+
+
+class ProductReviewsListView(ListAPIView):
+    # queryset = ProductReview.objects.all()
+    serializer_class = ProductReviewListSerializer
+
+    def get_queryset(self):
+        product_id = self.request.query_params.get('product__id')
+        if product_id is None:
+            return ProductReview.objects.all().filter(product_id=product_id)
+        return Response(data={'status': false, 'messeage': 'No reviews'})
