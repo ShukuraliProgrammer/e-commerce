@@ -54,11 +54,10 @@ class ProductReviewsListView(ListAPIView):
 
     def get_queryset(self):
         product_id = self.request.query_params.get('product_id')
-        if product_id is None:
+        if product_id is not None:
             return self.queryset.filter(product_id=product_id)
-        return Response(
-            data={
-                'status': false,
-                'messeage': 'No reviews'
-            }
-        )
+        data = {
+            'status': false,
+            'messeage': 'No reviews'
+        }
+        return Response(data=data)
