@@ -3,7 +3,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
 from products.models import Category, Product, ProductColour, ProductSize, ProductReview
-from products.seralizers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
+from products.serializers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
     ProductSizeListSerializer, ProductReviewListSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -57,7 +57,7 @@ class ProductReviewsListView(ListAPIView):
         if product_id is not None:
             return self.queryset.filter(product_id=product_id)
         data = {
-            'status': false,
+            'status': False,
             'messeage': 'No reviews'
         }
         return Response(data=data)

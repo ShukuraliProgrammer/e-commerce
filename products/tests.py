@@ -1,33 +1,47 @@
-from rest_framework.test import APITestCase
 from django.urls import reverse
-
-from products.models import Product, ProductReview
 from accounts.models import User
 
+from rest_framework import status
+from rest_framework.test import APITestCase
 
-class ReviewAPITestCase(APITestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.user = User.objects.create_user(email='test@gmail.com', password='0204')
-        cls.product = Product.objects.create(
-            name='sddc',
+from products.models import ProductReview, Product, Category
+from products.serializers import ProductReviewListSerializer
+
+
+class ProductReviewsListViewTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(username='testuser@gmail.com', password='1234')
+        self.category = Category.objects.create(name='AAAA')
+        self.product = Product.objects.create(
+            name='category',
             price=2.03,
-            short_description='ffj',
-            description='ooo',
+            short_description='short_description',
+            description='description',
             quanttity=1,
-            instructions='poo',
-
+            instructions='text',
+            category=self.category,
+            in_stock=True,
+            brand='brand',
+            discount=5
         )
-
-    def test_get_all_review_of_product(self):
-
-        response = ProductReview.objects.create(
-            product=1,
+        self.product_review = ProductReview.objects.create(
+            product=self.product,
             user=self.user,
             title='title',
-            review='review',
-            rank=1,
-            email='test@gamil.com'
+            email='testemail@gmal.com',
+            rank=5,
+            review="Great product"
         )
-        self.assertEqual(response.product, 1)
 
+    def test_get_reviews_by_product_id(self):
+        url = reverse('reviews')
+        response = self.client.get(url, {'product_id': 1})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        serializer = ProductReviewListSerializer(ProductReview.objects.filter(product_id=1), many=True)
+        self.assertEqual(response.data['results'], serializer.data)
+
+    def test_get_reviews_no_product_id(self):
+        url = reverse('reviews')
+        response = self.client.get(url, {'product_id': 2})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'], [])
