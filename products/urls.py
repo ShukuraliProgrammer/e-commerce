@@ -7,5 +7,6 @@ urlpatterns = [
     path("products/", ProductListAPIView.as_view(), name="products"),
     path("colours/", ProductColourListView.as_view(), name="colours"),
     path("sizes/", ProductSizeListView.as_view(), name="sizes"),
-    path("reviews/", ProductReviewsListView.as_view(), name="reviews")
+    path("reviews/", ProductReviewsListView.as_view(), name="reviews"),
+    path("relatedproduct/<int:id>", RelatedProductsView.as_view(), name="relatedproduct")
 ]
