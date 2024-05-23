@@ -5,13 +5,12 @@ from products.utitls import validate_rating
 from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor.fields import RichTextField
 
-# Create your models here.
 
+# Create your models here.
 class Category(MPTTModel):
     name = models.CharField(_("name"), max_length=255)
     image = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
     parent = TreeForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children')
-
 
     def __str__(self):
         return self.name
@@ -22,6 +21,7 @@ class Category(MPTTModel):
         
     class MPTTMeta:
         order_insertion_by = ['name']
+
 
 class Product(models.Model):
     name = models.CharField(_("name"), max_length=255)
@@ -35,7 +35,6 @@ class Product(models.Model):
     brand = models.CharField(_("brand"), max_length=255)
     discount = models.IntegerField(_("discount"), help_text=_("in percentage"))
     thumbnail = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
-
 
     def __str__(self):
         return self.name
@@ -56,6 +55,7 @@ class ProductImage(models.Model):
     def __str__(self):
         return f"Product: {self.product.id}|Image: {self.image.id}"
 
+
 class ProductSize(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="sizes")
     value = models.CharField(_("value"), max_length=255)
@@ -75,7 +75,6 @@ class ProductReview(models.Model):
 
     def __str__(self):
         return f"Product: {self.product.id}|User: {self.user.id}"
-    
 
 
 class Wishlist(models.Model):
