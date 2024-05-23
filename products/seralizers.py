@@ -3,6 +3,7 @@ from accounts.serializers import UserSerializer
 from products.models import Category, Product, ProductReview
 from common.serializers import MediaSerializer
 
+
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -26,13 +27,10 @@ class ProductSizeListSerializer(serializers.Serializer):
     id = serializers.IntegerField()
 
 
-class ProductReviewSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-    product = ProductListSerializer(read_only=True)
-    user_id = serializers.IntegerField(write_only=True)
+class AddReviewToProductSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField(write_only=True)
     email = serializers.EmailField(required=True)
 
     class Meta:
         model = ProductReview
-        fields = ('title', 'review', 'rank', 'email', 'product', 'user', 'user_id', 'product_id')
+        fields = ('title', 'review', 'rank', 'email', 'product_id')
