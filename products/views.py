@@ -61,3 +61,23 @@ class ProductReviewsListView(ListAPIView):
             'messeage': 'No reviews'
         }
         return Response(data=data)
+
+
+class RelatedProductsView(APIView):
+    http_method_names = ['get', ]
+    def get(self, request, id):
+        try:
+            product = Product.objects.get(id=id)
+            products = Product.objects.filter(category=product.category)
+            serializer = ProductListSerializer(products, many=True).data
+            return Response(serializer)
+
+        except Product.DoesNotExist:
+            data = {
+                'status': False,
+                'message': 'Product does not found'
+            }
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            raise e
