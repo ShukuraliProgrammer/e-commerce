@@ -15,6 +15,7 @@ from rest_framework.response import Response
 
 # Create your views here.
 
+
 class CategoryListAPIView(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryListSerializer
@@ -50,16 +51,6 @@ class ProductColourListView(ListAPIView):
 class ProductSizeListView(ListAPIView):
     queryset = ProductSize.objects.all()
     serializer_class = ProductSizeListSerializer
-
-
-class AddReviewToProductApiView1(APIView):
-
-    def post (self, request):
-        serializer = AddReviewToProductSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
-        return Response(data = serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AddReviewToProductApiView(APIView):

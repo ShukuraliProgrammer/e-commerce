@@ -11,7 +11,7 @@ class Media(models.Model):
         VIDEO = "video", _("video")
 
     file = models.FileField(_("File"), upload_to="files/", validators=[
-        FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mp3', 'flac', 'doc', 'pdf'])])
+        FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mp3', 'flac', 'doc', 'pdf'])], null=True, blank=True)
     type = models.CharField(_("Type"), max_length=60, choices=MediaType.choices)
 
     def __str__(self):
