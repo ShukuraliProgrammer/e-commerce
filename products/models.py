@@ -12,7 +12,6 @@ class Category(MPTTModel):
     image = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
     parent = TreeForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children')
 
-
     def __str__(self):
         return self.name
     
@@ -35,7 +34,6 @@ class Product(models.Model):
     brand = models.CharField(_("brand"), max_length=255)
     discount = models.IntegerField(_("discount"), help_text=_("in percentage"))
     thumbnail = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
-
 
     def __str__(self):
         return self.name
