@@ -1,7 +1,8 @@
 from rest_framework import serializers
-
-from products.models import Category, Product
+from accounts.serializers import UserSerializer
+from products.models import Category, Product, ProductReview
 from common.serializers import MediaSerializer
+
 
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +25,12 @@ class ProductColourListSerializer(serializers.Serializer):
 class ProductSizeListSerializer(serializers.Serializer):
     value = serializers.CharField()
     id = serializers.IntegerField()
+
+
+class AddReviewToProductSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField(write_only=True)
+    email = serializers.EmailField(required=True)
+
+    class Meta:
+        model = ProductReview
+        fields = ('title', 'review', 'rank', 'email', 'product_id')

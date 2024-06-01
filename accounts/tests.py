@@ -3,6 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from .models import User
 
+
 class TestUserCreateView(APITestCase):
     def setUp(self):
         pass
@@ -20,7 +21,6 @@ class TestUserCreateView(APITestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(list(response.data.keys()), ['first_name', 'last_name', 'email', 'password'])
         self.assertEqual(response.data["first_name"], "TestName")
-
 
 
 class TestVerifyOtpView(APITestCase):

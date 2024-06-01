@@ -13,13 +13,13 @@ environ.Env.read_env('.env')
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = 'django-insecure-efr7ygm13gueth@&1bq4r)7un_^8gi2l7f!h=!0(ev^aiwwifw'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG')
+DEBUG = True
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
-HOST = env.str('HOST')
+# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+# HOST = env.str('HOST')
 AUTH_USER_MODEL = "accounts.User"
 
 # Application definition
