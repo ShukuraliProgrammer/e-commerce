@@ -1,14 +1,13 @@
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.generics import ListAPIView, get_object_or_404, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
-from products.models import Category, Product, ProductColour, ProductReview, ProductSize
-from products.seralizers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
+from products.models import Category, Product, ProductColour, ProductSize, ProductReview
+from products.serializers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
     ProductSizeListSerializer, AddReviewToProductSerializer
-
+from django.core.exceptions import ObjectDoesNotExist
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.response import Response
@@ -126,3 +125,21 @@ class ProductReviewDetailApiView(APIView):
 
 
 
+class RelatedProductsView(APIView):
+    http_method_names = ['get', ]
+    def get(self, request, id):
+        try:
+            product = Product.objects.get(id=id)
+            products = Product.objects.filter(category=product.category)
+            serializer = ProductListSerializer(products, many=True).data
+            return Response(serializer)
+
+        except Product.DoesNotExist:
+            data = {
+                'status': False,
+                'message': 'Product does not found'
+            }
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as e:
+            raise e
