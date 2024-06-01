@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.generics import ListAPIView, get_object_or_404, CreateAPIView
@@ -8,6 +9,7 @@ from products.models import Category, Product, ProductColour, ProductSize, Produ
 from products.serializers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
     ProductSizeListSerializer, AddReviewToProductSerializer
 from django.core.exceptions import ObjectDoesNotExist
+from products.models import Category, Product, ProductColour, ProductReview, ProductSize
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.response import Response
