@@ -69,13 +69,16 @@ class ProductReview(models.Model):
     user = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
     title = models.CharField(_("title"), max_length=255)
     review = models.TextField(_("review"))
-    rank = models.IntegerField(_("rank"), validators=[validate_rating])
+    rank = models.IntegerField(_("rank"), validators=[])
     email = models.EmailField(_("email"))
     created_at = models.DateTimeField(_("created at"), auto_now_add=True)
 
     def __str__(self):
         return f"Product: {self.product.id}|User: {self.user.id}"
-    
+
+    class Meta:
+        unique_together = ["product", "user"]
+
 
 
 class Wishlist(models.Model):

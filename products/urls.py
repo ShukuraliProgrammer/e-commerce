@@ -8,6 +8,7 @@ urlpatterns = [
     path("colours/", ProductColourListView.as_view(), name="colours"),
     path("sizes/", ProductSizeListView.as_view(), name="sizes"),
     path("review/", AddReviewToProductApiView.as_view(), name="review"),
-    path("review/<int:review_id>", ProductReviewDetailApiView.as_view(), name="detail-review")
+    path("review/<int:review_id>", ProductReviewDetailApiView.as_view(), name="detail-review"),
+    path("related-products/<int:id>", RelatedProductsView.as_view(), name="related-products"),
 
 ]

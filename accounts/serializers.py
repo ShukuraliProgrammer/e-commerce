@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.utils import timezone
 from django.conf import settings
-from accounts.models import User, VerifictionOtp
+from accounts.models import User, VerifictionOtp, UserAddress
 from accounts.utils import generate_code
 from accounts.tasks import send_otp_code_to_email
 
@@ -58,3 +58,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'first_name', 'last_name', 'email')
+
+
+class CreateUserAddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAddress
+        fields = ('name', 'phone_number', 'apartment', 'street', 'pin_code')
+
+
+class UserAddressListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAddress
+        fields = ('id', 'name', 'phone_number', 'apartment', 'street', 'pin_code')

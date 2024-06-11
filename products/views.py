@@ -4,15 +4,16 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView, get_object_or_404, CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
-
+from rest_framework.serializers import ValidationError
 from products.models import Category, Product, ProductColour, ProductSize, ProductReview
 from products.serializers import CategoryListSerializer, ProductListSerializer, ProductColourListSerializer, \
-    ProductSizeListSerializer, AddReviewToProductSerializer
+    ProductSizeListSerializer, AddReviewToProductSerializer, ProductReviewUpdateSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from products.models import Category, Product, ProductColour, ProductReview, ProductSize
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.response import Response
+
 
 # Create your views here.
 
@@ -53,31 +54,32 @@ class ProductSizeListView(ListAPIView):
     serializer_class = ProductSizeListSerializer
 
 
-
 class AddReviewToProductApiView(APIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = AddReviewToProductSerializer
 
-    def post (self, request):
-        serializer = AddReviewToProductSerializer(data=request.data)
-        if serializer.is_valid():
+    def post(self, request):
+        try:
+            serializer = AddReviewToProductSerializer(data=request.data)
+            if not serializer.is_valid():
+                return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
             user = request.user
             serializer.save(user=user)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
-        return Response(data = serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            data = {
+                "detail": str(e.detail)
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            return Response(data={"detail": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class ProductReviewDetailApiView(APIView):
-    def get(self, request, review_id):
-        try:
-            get_object_or_404(ProductReview, id=review_id)
-        except ObjectDoesNotExist:
-            data = {
-                "detail": 'Bunday review topilmadi'
-            }
-            return Response(data, status=status.HTTP_404_NOT_FOUND)
-        review = ProductReview.objects.get(id=review_id)
-        serializer = AddReviewToProductSerializer(review)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductReviewUpdateSerializer
 
     def patch(self, request, review_id):
         try:
@@ -103,7 +105,7 @@ class ProductReviewDetailApiView(APIView):
             }
             return Response(data, status=status.HTTP_404_NOT_FOUND)
         review = ProductReview.objects.get(id=review_id)
-        serializer = AddReviewToProductSerializer(instance=review, data=request.data)
+        serializer = self.serializer_class(instance=review, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -125,14 +127,13 @@ class ProductReviewDetailApiView(APIView):
         return Response(data=data, status=status.HTTP_204_NO_CONTENT)
 
 
-
-
 class RelatedProductsView(APIView):
     http_method_names = ['get', ]
+
     def get(self, request, id):
         try:
             product = Product.objects.get(id=id)
-            products = Product.objects.filter(category=product.category)
+            products = Product.objects.filter(category=product.category).exclude(id=id)
             serializer = ProductListSerializer(products, many=True).data
             return Response(serializer)
 

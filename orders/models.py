@@ -86,12 +86,15 @@ class Order(models.Model):
         CLICK = "click", _("Click")
 
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE, related_name="orders")
-    status = models.CharField(_("Status"), max_length=60, choices=OrderStatus.choices)
+    status = models.CharField(_("Status"), max_length=60, choices=OrderStatus.choices, default=OrderStatus.CREATED)
     items = models.ManyToManyField(CartItem, related_name="orders")
     total_price = models.FloatField(_("Total Price"))
     address = models.ForeignKey('accounts.UserAddress', on_delete=models.CASCADE, related_name="orders")
     discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
-    payment_status = models.CharField(_("Payment Status"), max_length=60, choices=PaymentStatus.choices)
-    payment_method = models.CharField(_("Payment Method"), max_length=60)
+    payment_status = models.CharField(_("Payment Status"), max_length=60, choices=PaymentStatus.choices, null=True,blank=True)
+    payment_method = models.CharField(_("Payment Method"), max_length=60, null=True, blank=True)
     delivery_tariff = models.ForeignKey(DeliveryTariff, on_delete=models.SET_NULL, null=True, blank=True,
                                         related_name="orders")
+
+
+
