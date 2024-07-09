@@ -4,6 +4,8 @@ from common.models import Media
 from products.utitls import validate_rating
 from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor.fields import RichTextField
+from products.managers import ProductManager
+from django.core.cache import cache
 
 # Create your models here.
 
@@ -12,20 +14,20 @@ class Category(MPTTModel):
     image = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
     parent = TreeForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, related_name='children')
 
-
     def __str__(self):
         return self.name
-    
+
     class Meta:
-        verbose_name = _("Category") # Bo'limlar
+        verbose_name = _("Category")  # Bo'limlar
         verbose_name_plural = _("Categories")
-        
+
     class MPTTMeta:
         order_insertion_by = ['name']
 
+
 class Product(models.Model):
     name = models.CharField(_("name"), max_length=255)
-    price = models.FloatField(_("price")) # 2.03
+    price = models.FloatField(_("price"))  # 2.03
     short_description = models.TextField(_("short description"))
     description = models.TextField(_("description"))
     quanttity = models.IntegerField(_("quantity"))
@@ -36,9 +38,14 @@ class Product(models.Model):
     discount = models.IntegerField(_("discount"), help_text=_("in percentage"))
     thumbnail = models.ForeignKey(Media, on_delete=models.SET_NULL, null=True, blank=True)
 
+    objects = ProductManager()
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        cache.delete("all_products")
+        self.category.save()
 
 
 class ProductColour(models.Model):
@@ -47,7 +54,7 @@ class ProductColour(models.Model):
 
     def __str__(self):
         return f"Product: {self.product.id}|Colour: {self.colour.id}"
-    
+
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="images")
@@ -55,6 +62,7 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Product: {self.product.id}|Image: {self.image.id}"
+
 
 class ProductSize(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="sizes")
@@ -78,7 +86,6 @@ class ProductReview(models.Model):
 
     class Meta:
         unique_together = ["product", "user"]
-
 
 
 class Wishlist(models.Model):

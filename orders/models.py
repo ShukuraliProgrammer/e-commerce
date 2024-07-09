@@ -35,6 +35,7 @@ class Discount(models.Model):
     percentage = models.FloatField(_("Percentage"))
     start_date = models.DateTimeField(_("Start Date"))
     end_date = models.DateTimeField(_("End Date"))
+    max_limit = models.IntegerField(_("Max Limit"))
 
     def __str__(self):
         return self.code
