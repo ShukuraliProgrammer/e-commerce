@@ -42,8 +42,9 @@ THIRD_PARTY_APPS = [
     'rest_framework',
     'drf_spectacular',
     'django_filters',
-    "debug_toolbar",
 ]
+if DEBUG:
+    THIRD_PARTY_APPS.append("debug_toolbar")
 
 INSTALLED_APPS = LOCAL_APPS + THIRD_PARTY_APPS
 
