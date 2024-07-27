@@ -3,7 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from common.models import Media
 from products.utitls import validate_rating
 from mptt.models import MPTTModel, TreeForeignKey
-from ckeditor.fields import RichTextField
+from django_ckeditor_5.fields import CKEditor5Field
+
 from products.managers import ProductManager
 from django.core.cache import cache
 
@@ -31,7 +32,7 @@ class Product(models.Model):
     short_description = models.TextField(_("short description"))
     description = models.TextField(_("description"))
     quanttity = models.IntegerField(_("quantity"))
-    instructions = RichTextField()
+    instructions = CKEditor5Field(config_name='extends')
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="products")
     in_stock = models.BooleanField(_("in stock"), default=True)
     brand = models.CharField(_("brand"), max_length=255)
