@@ -84,3 +84,5 @@ python manage.py createsuperuser
 ```bash
 python manage.py runserver
 ```
+
+## changes made for pr
